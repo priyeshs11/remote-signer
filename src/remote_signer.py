@@ -22,6 +22,7 @@ from dyndbmutex.dyndbmutex import DynamoDbMutex
 class RemoteSigner:
     BLOCK_PREAMBLE = 1
     ENDORSEMENT_PREAMBLE = 2
+    TRANSACTION_PREAMBLE = 3
     TEST_SIGNATURE = 'p2sigfqcE4b3NZwfmcoePgdFCvDgvUNa6DBp9h7SZ7wUE92cG3hQC76gfvistHBkFidj1Ymsi1ZcrNHrpEjPXQoQybAv6rRxke'
     P256_SIGNATURE = struct.unpack('>L', b'\x36\xF0\x2C\x34')[0]  # results in p2sig prefix when encoded with base58 (p2sig(98))
     CHAIN_ID = struct.unpack('>L', b'\x00\x57\x52\x00')[0] # results in Net prefix when encoded with base58 (Net(15))
@@ -61,6 +62,9 @@ class RemoteSigner:
     def is_endorsement(self):
         return list(self.data)[0] == self.ENDORSEMENT_PREAMBLE
 
+    def is_transaction(self):
+        return list(self.data)[0] == self.TRANSACTION_PREAMBLE
+
     def get_block_level(self):
         level = -1
         if self.is_block():
@@ -80,8 +84,10 @@ class RemoteSigner:
         payload_chainid = self.get_chain_id()
         if self.is_block():
             sig_type = 'Baking_' + payload_chainid
-        else:
+        elif self.is_endorsement():
             sig_type = 'Endorsement_' + payload_chainid
+        else:
+            sig_type = 'Transaction_' + payload_chainid
         ddb = DynamoDBClient(self.ddb_region, self.ddb_table, sig_type, payload_level)
         not_signed = ddb.check_double_signature()
         if not_signed:
@@ -102,8 +108,10 @@ class RemoteSigner:
         my_name = str(uuid.uuid4()).split("-")[0]
         if self.is_block():
             sig_type = 'Baking_' + payload_chainid
-        else:
+        elif self.is_endorsement():
             sig_type = 'Endorsement_' + payload_chainid
+        else:
+            sig_type = 'Transaction_' + payload_chainid
         m = DynamoDbMutex(sig_type, holder=my_name, timeoutms=60 * 1000, region_name=ddb_region)
         locked = m.lock() # attempt to acquire the lock
         if locked:
@@ -112,7 +120,7 @@ class RemoteSigner:
             logging.info('About to sign {} with key handle {}'.format(data_to_sign, handle))
             if self.valid_block_format(data_to_sign):
                 logging.info('Block format is valid')
-                if self.is_block() or self.is_endorsement():
+                if self.is_block() or self.is_endorsement() or self.is_transaction():
                     logging.info('Preamble is valid')
                     if self.not_already_signed():
                         if test_mode:
