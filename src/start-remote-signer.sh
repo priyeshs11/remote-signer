@@ -50,7 +50,7 @@ load_password() {
 start_remote_signer() {
 	echo "Starting remote signer..."
 	cd /home/ec2-user
-	FLASK_APP=signer /usr/local/bin/flask run --host=0.0.0.0
+	FLASK_APP=signer /usr/local/bin/flask run --host=0.0.0.0 --port=6732
 }
 
 # main
