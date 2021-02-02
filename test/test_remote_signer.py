@@ -34,10 +34,10 @@ class TestRemoteSigner(unittest.TestCase):
         'hsm_lib': '/opt/cloudhsm/lib/libcloudhsm_pkcs11.so',
         'node_addr': 'http://127.0.0.1:8732',
         'keys': {
-            'tz1h55rXznDt5VBMWhAi34uJ4qrPjeqsg596': {
-                'public_key': 'edpkufZo4oi9vWqMkbe9eyy1r3ATAq59csEQoMLZU3vjy5X4ErVnWK',
-                'private_handle': 7,
-                'public_handle': 9
+            'tz2B7awAQcrprEGdtgaGgEEp7jJ8CtBs9DUt': {
+                'public_key': 'sppk7ceK2S8mYZFhxp7iq8srRa5ocoLRpgGk6UdjR39Tuq9Rys1i1aD',
+                'private_handle': 262155,
+                'public_handle': 262152
             }
         }
     }
