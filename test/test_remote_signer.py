@@ -28,6 +28,20 @@ class TestRemoteSigner(unittest.TestCase):
         }
     }
 
+    MY_CONFIG = {
+        'hsm_username': 'crypto_user',
+        'hsm_slot': 1,
+        'hsm_lib': '/opt/cloudhsm/lib/libcloudhsm_pkcs11.so',
+        'node_addr': 'http://127.0.0.1:8732',
+        'keys': {
+            'tz1h55rXznDt5VBMWhAi34uJ4qrPjeqsg596': {
+                'public_key': 'edpkufZo4oi9vWqMkbe9eyy1r3ATAq59csEQoMLZU3vjy5X4ErVnWK',
+                'private_handle': 7,
+                'public_handle': 9
+            }
+        }
+    }
+
     def test_identifies_invalid_block_preamble(self):
         rs = RemoteSigner(self.TEST_CONFIG, self.INVALID_PREAMBLE)
         self.assertFalse(rs.is_block())
