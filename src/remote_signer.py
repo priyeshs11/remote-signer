@@ -77,7 +77,7 @@ class RemoteSigner:
 
     def get_chain_id(self):
         chainid = bytes.fromhex(self.payload[2:10])
-        return bitcoin.bin_to_b58check(chainid, magicbyte=RemoteSigner.CHAIN_ID)
+        return bitcoin.bin_to_b58check(chainid)
 
     def not_already_signed(self):
         payload_level = self.get_block_level()
@@ -133,7 +133,6 @@ class RemoteSigner:
                                 sig = c.sign(handle=handle, data=hashed_data, mechanism=HsmMech.ECDSA)
                                 logging.info('Raw signature: {}'.format(sig))
                                 encoded_sig = RemoteSigner.b58encode_signature(sig)
-                                encoded_sig = encoded_sig[2:]
                                 logging.info('Base58-encoded signature: {}'.format(encoded_sig))
                     else:
                         logging.error('Invalid level')
