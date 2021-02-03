@@ -101,7 +101,7 @@ class RemoteSigner:
 
     @staticmethod
     def b58encode_signature(sig):
-        return bitcoin.bin_to_b58check(sig, magicbyte=RemoteSigner.SECP256K1_SIGNATURE)
+        return bitcoin.bin_to_b58check(sig, magicbyte='0d7365133f')
 
     def sign(self, handle, test_mode=False):
         # This code acquires a mutex lock using https://github.com/chiradeep/dyndb-mutex
