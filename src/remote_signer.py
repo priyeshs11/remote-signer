@@ -133,6 +133,7 @@ class RemoteSigner:
                                 sig = c.sign(handle=handle, data=hashed_data, mechanism=HsmMech.ECDSA)
                                 logging.info('Raw signature: {}'.format(sig))
                                 encoded_sig = RemoteSigner.b58encode_signature(sig)
+                                encoded_sig = encoded_sig[2:]
                                 logging.info('Base58-encoded signature: {}'.format(encoded_sig))
                     else:
                         logging.error('Invalid level')
