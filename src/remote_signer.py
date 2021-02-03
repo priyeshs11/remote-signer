@@ -24,7 +24,7 @@ class RemoteSigner:
     ENDORSEMENT_PREAMBLE = 2
     TRANSACTION_PREAMBLE = 3
     TEST_SIGNATURE = 'p2sigfqcE4b3NZwfmcoePgdFCvDgvUNa6DBp9h7SZ7wUE92cG3hQC76gfvistHBkFidj1Ymsi1ZcrNHrpEjPXQoQybAv6rRxke'
-    SECP256K1_SIGNATURE = struct.unpack('>q', b'\x0D\x73\x65\x13\x3F')[0]  
+    SECP256K1_SIGNATURE = struct.unpack('>q', b'\x0D\x07\x03\x06\x05\x01\x03\x3F')[0]  
     P256_SIGNATURE = struct.unpack('>L', b'\x36\xF0\x2C\x34')[0]  # results in p2sig prefix when encoded with base58 (p2sig(98))
     # ED25519_SIGNATURE = struct.unpack('>L', b'\x09\xF5\xCD\x86\x12')[0]  # results in edsig prefix when encoded with base58 (edsig(99))
     GEN_SIGNATURE = struct.unpack('>L', b'\x00\x04\x82\x2B')[0]  # results in sig prefix when encoded with base58 (sig(96))
