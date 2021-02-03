@@ -24,14 +24,14 @@ class RemoteSigner:
     ENDORSEMENT_PREAMBLE = 2
     TRANSACTION_PREAMBLE = 3
     TEST_SIGNATURE = 'p2sigfqcE4b3NZwfmcoePgdFCvDgvUNa6DBp9h7SZ7wUE92cG3hQC76gfvistHBkFidj1Ymsi1ZcrNHrpEjPXQoQybAv6rRxke'
-    # SECP256K1_SIGNATURE = struct.unpack('>L', '0d7365133f'.encode())[0]  
-    P256_SIGNATURE = struct.unpack('>L', b'\x36\xF0\x2C\x34')[0]  # results in p2sig prefix when encoded with base58 (p2sig(98))
-    # ED25519_SIGNATURE = struct.unpack('>L', b'\x09\xF5\xCD\x86\x12')[0]  # results in edsig prefix when encoded with base58 (edsig(99))
-    GEN_SIGNATURE = struct.unpack('>L', b'\x00\x04\x82\x2B')[0]  # results in sig prefix when encoded with base58 (sig(96))
     CHAIN_ID = struct.unpack('>L', b'\x00\x57\x52\x00')[0] # results in Net prefix when encoded with base58 (Net(15))
+    P256_SIGNATURE = struct.unpack('>L', b'\x36\xF0\x2C\x34')[0]  # results in p2sig prefix when encoded with base58 (p2sig(98))
+    SECP256K1_SIGNATURE = int('0d7365133f', base=16)  # results in spsig1 prefix when encoded with base58 (spsig1(99))
+    GEN_SIGNATURE = int('04822b', base=16)  # results in sig prefix when encoded with base58 (sig(96)) 
+    ED25519_SIGNATURE = int('09f5cd8612', base=16)  # results in edsig prefix when encoded with base58 (edsig(99))
 
 
-    def __init__(self, config, payload='', rpc_stub=None):
+    def __init__(self, config, payload='', rpc_stub=None, curve='ed25519'):
         self.keys = config['keys']
         self.payload = payload
         logging.info('Verifying payload')
@@ -50,6 +50,14 @@ class RemoteSigner:
         # Add support for DynamoDB on 9-22-18 by LY
         self.ddb_region = environ['REGION']
         self.ddb_table = environ['DDB_TABLE']
+        if (curve == 'ed25519'):
+            self.prefix = ED25519_SIGNATURE
+        elif (curve == 'secp256k1'):
+            self.prefix = SECP256K1_SIGNATURE
+        elif (curve == 'nistp256'):
+            self.prefix = P256_SIGNATURE
+        else:
+            self.prefix = GEN_SIGNATURE
 
     @staticmethod
     def valid_block_format(blockdata):
@@ -100,8 +108,8 @@ class RemoteSigner:
         return not_signed
 
     @staticmethod
-    def b58encode_signature(sig):
-        return bitcoin.bin_to_b58check(sig, magicbyte=int('0d7365133f', base=16))
+    def b58encode_signature(sig, magicbyte):
+        return bitcoin.bin_to_b58check(sig, magicbyte=magicbyte)
 
     def sign(self, handle, test_mode=False):
         # This code acquires a mutex lock using https://github.com/chiradeep/dyndb-mutex
@@ -135,7 +143,7 @@ class RemoteSigner:
                                 logging.info('Hashed data to sign: {}'.format(hashed_data))
                                 sig = c.sign(handle=handle, data=hashed_data, mechanism=HsmMech.ECDSA)
                                 logging.info('Raw signature: {}'.format(sig))
-                                encoded_sig = RemoteSigner.b58encode_signature(sig)
+                                encoded_sig = RemoteSigner.b58encode_signature(sig, self.prefix)
                                 logging.info('Base58-encoded signature: {}'.format(encoded_sig))
                     else:
                         logging.error('Invalid level')

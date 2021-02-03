@@ -47,6 +47,7 @@ def sign(key_hash):
         data = request.get_json(force=True)
         if key_hash in config['keys']:
             logging.info('Found key_hash {} in config'.format(key_hash))
+            curve = get_key_curve(key_hash)
             key = config['keys'][key_hash]
             logging.info('Attempting to sign {}'.format(data))
             rs = RemoteSigner(config, data)
@@ -101,6 +102,20 @@ def authorized_keys():
         status=200,
         mimetype='application/json'
     )
+
+
+def get_key_curve(key_hash):
+    prefix = key_hash[:3]
+    curve = 'unknown'
+    if (prefix == 'tz1'):
+        curve = 'ed25519'
+    elif (prefix == 'tz2'):
+        curve = 'secp256k1'
+    elif (prefix == 'tz3'):
+        curve = 'nistp256'
+    else:
+        curve = 'unknown'
+    return curve
 
 
 if __name__ == '__main__':
