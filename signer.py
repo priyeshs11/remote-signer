@@ -50,7 +50,7 @@ def sign(key_hash):
             curve = get_key_curve(key_hash)
             key = config['keys'][key_hash]
             logging.info('Attempting to sign {}'.format(data))
-            rs = RemoteSigner(config, data)
+            rs = RemoteSigner(config, data, curve=curve)
             response = jsonify({
                 'signature': rs.sign(key['private_handle'])
             })

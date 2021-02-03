@@ -51,13 +51,13 @@ class RemoteSigner:
         self.ddb_region = environ['REGION']
         self.ddb_table = environ['DDB_TABLE']
         if (curve == 'ed25519'):
-            self.prefix = ED25519_SIGNATURE
+            self.prefix = RemoteSigner.ED25519_SIGNATURE
         elif (curve == 'secp256k1'):
-            self.prefix = SECP256K1_SIGNATURE
+            self.prefix = RemoteSigner.SECP256K1_SIGNATURE
         elif (curve == 'nistp256'):
-            self.prefix = P256_SIGNATURE
+            self.prefix = RemoteSigner.P256_SIGNATURE
         else:
-            self.prefix = GEN_SIGNATURE
+            self.prefix = RemoteSigner.GEN_SIGNATURE
 
     @staticmethod
     def valid_block_format(blockdata):
