@@ -77,7 +77,7 @@ class RemoteSigner:
 
     def get_chain_id(self):
         chainid = bytes.fromhex(self.payload[2:10])
-        return bitcoin.bin_to_b58check(chainid)
+        return bitcoin.bin_to_b58check(chainid, magicbyte=RemoteSigner.CHAIN_ID)
 
     def not_already_signed(self):
         payload_level = self.get_block_level()
@@ -98,7 +98,7 @@ class RemoteSigner:
 
     @staticmethod
     def b58encode_signature(sig):
-        return bitcoin.bin_to_b58check(sig, magicbyte=RemoteSigner.P256_SIGNATURE)
+        return bitcoin.bin_to_b58check(sig)
 
     def sign(self, handle, test_mode=False):
         # This code acquires a mutex lock using https://github.com/chiradeep/dyndb-mutex
