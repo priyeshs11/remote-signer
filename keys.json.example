@@ -1,0 +1,13 @@
+{
+    "hsm_username": "user_name",
+    "hsm_slot": 1,
+    "hsm_lib": "/opt/cloudhsm/lib/libcloudhsm_pkcs11.so",
+    "node_addr": "http://127.0.0.1:8732",
+    "keys": {
+        "tz1WJ8jmFm2jC4An23by82ed8QjWRsM15Jua": { 
+            "public_key": "publick_key_here",
+            "private_handle": 1,
+            "public_handle": 2
+        }
+    }
+}

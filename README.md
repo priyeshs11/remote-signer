@@ -1,4 +1,6 @@
-# Tezos Remote Signer
+# Tezos Remote Signer Fork 
+
+Forked from [https://github.com/tacoinfra/remote-signer](url)
 
 This is a Python Flask app that receives messages from the Tezos baking client and passes them on to a remote HSM to be signed. This software uses the [py-hsm module](https://github.com/bentonstark/py-hsm) to support PKCS#11 signing operations, which means it should support the following HSMs:
 
@@ -18,31 +20,55 @@ Note that we have only tested it on [AWS CloudHSM](https://aws.amazon.com/cloudh
 
 Please note that this software does not provide any authentication or authorization. You will need to take care of that yourself. It simply returns the signature for valid payloads, after performing some checks:
 * Is the message a valid payload?
-* Does the message begin with a 0x01 or 0x02? Indicating it is a baking or endorsement, rather than a 0x03 transfer.
+* Does the message begin with a 0x01 or 0x02 or 0x03? Indicating it is a baking, endorsement or a transfer.
 * Is the message within a certain threshold of the head of the chain? Ensures you are signing valid blocks.
 * For baking signatures, is the block height of the payload greater than the current block height? This prevents double baking.
 
 ## Installation
 
 Please note that you will need to install and compile your vendor's PKCS#11 C library before the py-hsm module will work.
+
+You can use the following commands to install Python3.
+
 ```
-virtualenv venv
-source venv/bin/activate
-pip install -r requirements.txt
+sudo apt-get update
+sudo apt-get -y install python3-pip
 ```
+
+Download the application repository using git clone:
+
+```
+git clone https://github.com/priyeshs11/remote-signer.git
+```
+
+To install required modules, use pip with requirements.txt provided.
+
+```
+cd remote-signer
+pip3 install -r requirements.txt
+```
+
+Create a .env file with the same variables as in .env.example.
+```
+cp .env.example .env 
+```
+Create a keys.json file with the same structure as in keys.json.example.
+```
+cp keys.json.example keys.json
+```
+
+Complete the .env and keys.json file with your credentials and keys using the editor of your choice.
 
 ## Execution
 ```
-export HSM_PASSWORD=blah
-FLASK_APP=signer flask run
+python3 signer.py
+```
+To run in backgrund:
+```
+nohup python3 signer.py > signer.out &
 ```
 
 ## Running the tests
 ```
-export HSM_PASSWORD=blah
 python -m unittest test/test_remote_signer.py
 ```
-
-## Assistance
-
-If you would like assistance implementing this in a production/secure environment, with high availability, authentication, and authorization, please contact us at contact -at- blockscale.net.

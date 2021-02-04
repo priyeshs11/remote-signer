@@ -17,15 +17,15 @@ app = Flask(__name__)
 
 # sample config used for testing
 config = {
-    'hsm_username': 'crypto_user',
-    'hsm_slot': 1,
-    'hsm_lib': '/opt/cloudhsm/lib/libcloudhsm_pkcs11.so',
-    'node_addr': 'http://127.0.0.1:8732',
-    'keys': {
-        'tz2B7awAQcrprEGdtgaGgEEp7jJ8CtBs9DUt': {
-            'public_key': 'sppk7ceK2S8mYZFhxp7iq8srRa5ocoLRpgGk6UdjR39Tuq9Rys1i1aD',
-            'private_handle': 262155,
-            'public_handle': 262152
+    "hsm_username": "user_name",
+    "hsm_slot": 1,
+    "hsm_lib": "/opt/cloudhsm/lib/libcloudhsm_pkcs11.so",
+    "node_addr": "http://127.0.0.1:8732",
+    "keys": {
+        "tz1WJ8jmFm2jC4An23by82ed8QjWRsM15Jua": { 
+            "public_key": "publick_key_here",
+            "private_handle": 1,
+            "public_handle": 2
         }
     }
 }
