@@ -24,6 +24,12 @@ Please note that this software does not provide any authentication or authorizat
 * Is the message within a certain threshold of the head of the chain? Ensures you are signing valid blocks.
 * For baking signatures, is the block height of the payload greater than the current block height? This prevents double baking.
 
+## Pre-installation Setup
+
+* Follow the [AWS CloudHSM Geeting Started Guide](https://docs.aws.amazon.com/cloudhsm/latest/userguide/getting-started.html) to setup your cloudHSM.
+* Create a DynamoDB table with primary key "type" (string)
+* Don't forget to setup your aws credentials using [aws cli](https://docs.aws.amazon.com/cli/latest/reference/configure/index.html).
+
 ## Installation
 
 Please note that you will need to install and compile your vendor's PKCS#11 C library before the py-hsm module will work.
