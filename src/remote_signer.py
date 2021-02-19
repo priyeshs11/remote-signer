@@ -145,6 +145,10 @@ class RemoteSigner:
                                 logging.info('Raw signature: {}'.format(sig))
                                 encoded_sig = RemoteSigner.b58encode_signature(sig, self.prefix)
                                 logging.info('Base58-encoded signature: {}'.format(encoded_sig))
+                                c.logout()
+                                logging.info('Logged out from the HSM.')
+                                c.close_session()
+                                logging.info('Closed the HSM session.')
                     else:
                         logging.error('Invalid level')
                         m.release() # release the lock
