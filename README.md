@@ -27,6 +27,7 @@ Please note that this software does not provide any authentication or authorizat
 ## Pre-installation Setup
 
 * Follow the [AWS CloudHSM Geeting Started Guide](https://docs.aws.amazon.com/cloudhsm/latest/userguide/getting-started.html) to setup your cloudHSM.
+* Add the same security group that you created for the AWS CloudHSM cluster to your EC2 instance. Note: Do not remove the existing security group.
 * Create a DynamoDB table with primary key "type" (string)
 * Don't forget to setup your aws credentials using [aws cli](https://docs.aws.amazon.com/cli/latest/reference/configure/index.html).
 
